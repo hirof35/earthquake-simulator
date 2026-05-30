@@ -1,75 +1,32 @@
-# React + TypeScript + Vite
+# Earthquake & Tsunami 3D Simulator (React + Vite + Cesium)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Cesium.jsを活用し、日本近海における震源の三次元的深度構造、および海域地震における津波の動的な伝播予測範囲を立体的に可視化する3Dシミュレーターです。
+<img width="1219" height="1012" alt="スクリーンショット 2026-05-30 225955" src="https://github.com/user-attachments/assets/ee1e5876-380a-45ae-ac5a-790ce2f1a545" />
 
-Currently, two official plugins are available:
+## 特徴
+- **地表透過（シースルー）構造**: 地表および海底を透過させることで、沈み込むプレート境界に応じた震源の「深さ（Depth）」の位置関係を直感的に把握可能。
+- **動的タイムライン同期**: Cesiumのクロック（Clock）システムと同期し、発生時刻からの時間経過に応じた津波伝播予測の同心円アニメーションを生成。
+- **純粋ローカル配信（CORS / MIMEタイプ対策）**: Web Workerの制約を物理的に回避するため、アセットをドメイン内部から安全に配信するアーキテクチャを採用。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 開発環境のセットアップ
 
-## React Compiler
+本リポジトリには、容量削減のため Cesium のビルド済みスタティックアセット（`public/cesium/`）は含まれていません。クローン後は以下の手順に従ってアセットを配置してください。
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+### 1. 依存関係のインストール
+```bash
+npm install
+2. Cesiumアセットの手動配置（必須）
+node_modules/cesium/Build/Cesium フォルダを丸ごとコピーし、public/ 直下に cesium という名前で配置してください。
 
-Note: This will impact Vite dev & build performances.
+正しい構造:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Plaintext
+earthquake-simulator/
+├── public/
+│   └── cesium/
+│       ├── Assets/
+│       ├── Workers/
+│       └── ThirdParty/
+3. 開発サーバーの起動
+Bash
+npx vite --force
